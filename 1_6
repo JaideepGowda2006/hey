@@ -1,119 +1,441 @@
-echo "System Utilities Practice"   → Displays message on terminal.
-clear                             → Clears screen.
-date                              → Shows current date & time.
-uptime                            → Displays system running time.
-cal                               → Shows current month calendar.
-pwd                               → Shows current directory.
-whoami                            → Displays logged-in user.
-history                           → Shows previously executed commands.
+echo "System Utilities Practice"  
+→ Displays message on terminal.  
+Example: echo "Hello World"
 
-pwd                      → Check current location.
-mkdir ProjectData        → Create new project folder.
-cd ProjectData           → Enter the folder.
-touch file.txt           → Create a file.
-ls                       → List files.
-mv file.txt ..           → Move file to parent directory.
-cd ..                    → Go back to previous directory.
-rmdir ProjectData        → Remove empty directory.
+clear  
+→ Clears screen.  
+Example: clear
 
-who                      → Check logged-in users.
-sudo passwd alice        → Reset Alice’s password.
-sudo usermod -l bob_lead bob_dev   → Rename Bob’s username.
-sudo groupadd leads      → Create new group.
-sudo usermod -aG leads bob_lead    → Add Bob to group.
-sudo userdel -r charlie  → Delete Charlie’s account.
-sudo useradd diana       → Create new user Diana.
-sudo groupadd design     → Create design group.
-sudo usermod -aG design diana      → Add Diana to group.
-sudo chown -R bob_lead /shared/projects → Change ownership.
-su                       → Switch to root user.
-sudo gpasswd design      → Set group password.
+date  
+→ Shows current date & time.  
+Example: date
 
+uptime  
+→ Displays system running time.  
+Example: uptime
 
-ps aux                   → View all running processes.
-pstree                   → Show process hierarchy.
-pgrep process_name       → Find PID of process.
-nice -n 10 command       → Run process with low priority.
-renice 10 -p PID         → Change priority of running process.
-kill PID                 → Terminate process.
-pkill process_name       → Kill process by name.
-killall process_name     → Kill all instances.
-fg                       → Bring background process to foreground.
-bg                       → Resume process in background.
-xkill                    → Kill process via GUI.
+cal  
+→ Shows current month calendar.  
+Example: cal
 
-free -h                  → Check memory usage.
-cat /proc/meminfo        → Detailed memory info.
-top                      → Real-time monitoring.
-htop                     → Interactive monitoring.
-vmstat                   → Check swap/memory stats.
-sar -r                   → Analyze memory usage history.
-ps aux --sort=-%mem      → Find highest memory usage process.
+pwd  
+→ Shows current directory.  
+Example: pwd
 
+whoami  
+→ Displays logged-in user.  
+Example: whoami
 
-
-time        → Measures execution time.
-tty         → Shows terminal device.
-which       → Finds command path.
-ping        → Tests network connectivity.
-ifconfig    → Network configuration.
-pr          → Formats output for printing.
-lp/lpr      → Printing commands.
-lpstat      → Printer status.
-lpq         → Print queue.
-lprm        → Remove print jobs.
-cancel      → Cancel print job.
-mail        → Mail utility.
-
-
-fork        → Process creation (used in programming, not shell).
-exec        → Replace process image.
-getpid      → Get process ID.
-wait        → Wait for child process.
-close       → Close file descriptor.
-stat        → File metadata access.
-opendir     → Open directory stream.
-readdir     → Read directory entries.
-
-
-
-cp          → Copy files.
-wc          → Count file content.
-grep        → Search text.
-tr          → Translate characters.
-sort        → Sort file content.
-head/tail   → View portions of file.
-diff        → Compare files.
-comm        → Compare sorted files.
-less/more   → View file content.
-file        → Identify file type.
-type        → Show command type.
-split       → Split files.
-cmp         → Compare binary files.
-tar         → Archive files.
-find        → Search files.
-vim         → Text editor.
-gzip/bzip2  → Compression tools.
-unzip       → Extract zip.
-locate      → Fast file search.
-
-
-
-login       → Login to system.
-logout      → Logout session.
-exit        → Exit shell.
-groupdel    → Delete group.
-chage       → Manage password expiry.
-chgrp       → Change group ownership.
-chfn        → Change user info.
-
-
-df              → Disk usage.
-du              → Directory size.
-dmidecode       → Hardware memory info.
-getconf PAGE_SIZE → Memory page size.
+history  
+→ Shows previously executed commands.  
+Example: history
 
 
 
 
+
+
+pwd  
+→ Check current location.  
+Example: pwd
+
+mkdir ProjectData  
+→ Create new project folder.  
+Example: mkdir ProjectData
+
+cd ProjectData  
+→ Enter the folder.  
+Example: cd ProjectData
+
+touch file.txt  
+→ Create a file.  
+Example: touch file.txt
+
+ls  
+→ List files.  
+Example: ls
+
+mv file.txt ..  
+→ Move file to parent directory.  
+Example: mv file.txt ..
+
+cd ..  
+→ Go back to previous directory.  
+Example: cd ..
+
+rmdir ProjectData  
+→ Remove empty directory.  
+Example: rmdir ProjectData
+
+
+
+
+who  
+→ Check logged-in users.  
+Example: who
+
+sudo passwd alice  
+→ Reset Alice’s password.  
+Example: sudo passwd alice
+
+sudo usermod -l bob_lead bob_dev  
+→ Rename Bob’s username.  
+Example: sudo usermod -l bob_lead bob_dev
+
+sudo groupadd leads  
+→ Create new group.  
+Example: sudo groupadd leads
+
+sudo usermod -aG leads bob_lead  
+→ Add Bob to group.  
+Example: sudo usermod -aG leads bob_lead
+
+sudo userdel -r charlie  
+→ Delete Charlie’s account.  
+Example: sudo userdel -r charlie
+
+sudo useradd diana  
+→ Create new user Diana.  
+Example: sudo useradd diana
+
+sudo groupadd design  
+→ Create design group.  
+Example: sudo groupadd design
+
+sudo usermod -aG design diana  
+→ Add Diana to group.  
+Example: sudo usermod -aG design diana
+
+sudo chown -R bob_lead /shared/projects  
+→ Change ownership of folder.  
+Example: sudo chown -R bob_lead /shared/projects
+
+su  
+→ Switch to root user.  
+Example: su
+
+sudo gpasswd design  
+→ Set group password/manage members.  
+Example: sudo gpasswd design
+
+
+
+
+
+ps aux  
+→ View all running processes.  
+Example: ps aux
+
+pstree  
+→ Show process hierarchy.  
+Example: pstree
+
+pgrep process_name  
+→ Find PID of process.  
+Example: pgrep python
+
+nice -n 10 command  
+→ Run process with low priority.  
+Example: nice -n 10 firefox
+
+renice 10 -p PID  
+→ Change priority of running process.  
+Example: renice 10 -p 1234
+
+kill PID  
+→ Terminate process.  
+Example: kill 1234
+
+pkill process_name  
+→ Kill process by name.  
+Example: pkill chrome
+
+killall process_name  
+→ Kill all instances.  
+Example: killall vlc
+
+fg  
+→ Bring background process to foreground.  
+Example: fg
+
+bg  
+→ Resume process in background.  
+Example: bg
+
+xkill  
+→ Kill process via GUI.  
+Example: xkill
+
+
+
+
+
+
+
+
+
+free -h  
+→ Check memory usage.  
+Example: free -h
+
+cat /proc/meminfo  
+→ Detailed memory info.  
+Example: cat /proc/meminfo
+
+top  
+→ Real-time monitoring.  
+Example: top
+
+htop  
+→ Interactive monitoring.  
+Example: htop
+
+vmstat  
+→ Check swap/memory stats.  
+Example: vmstat
+
+sar -r  
+→ Analyze memory usage history.  
+Example: sar -r
+
+ps aux --sort=-%mem  
+→ Find highest memory usage process.  
+Example: ps aux --sort=-%mem | head
+
+
+
+
+
+
+
+time ls  
+→ Measures execution time.  
+Example: time ls
+
+tty  
+→ Shows terminal device.  
+Example: tty
+
+which ls  
+→ Finds command path.  
+Example: which ls
+
+ping google.com  
+→ Tests network connectivity.  
+Example: ping google.com
+
+ifconfig  
+→ Network configuration.  
+Example: ifconfig
+
+pr file.txt  
+→ Formats output for printing.  
+Example: pr report.txt
+
+lp file.txt  
+→ Printing command.  
+Example: lp report.txt
+
+lpstat  
+→ Printer status.  
+Example: lpstat
+
+lpq  
+→ Print queue.  
+Example: lpq
+
+lprm 1  
+→ Remove print job.  
+Example: lprm 1
+
+cancel 1  
+→ Cancel print job.  
+Example: cancel 1
+
+mail user1  
+→ Mail utility.  
+Example: mail user1
+
+
+
+
+
+fork()  
+→ Creates child process.  
+Example: fork() in C program
+
+exec()  
+→ Replaces process image.  
+Example: exec("ls")
+
+getpid()  
+→ Get process ID.  
+Example: getpid()
+
+wait()  
+→ Wait for child process.  
+Example: wait(NULL)
+
+close(fd)  
+→ Close file descriptor.  
+Example: close(1)
+
+stat file.txt  
+→ File metadata access.  
+Example: stat file.txt
+
+opendir()  
+→ Open directory stream.  
+Example: opendir(".")
+
+readdir()  
+→ Read directory entries.  
+Example: readdir(dir)
+
+
+
+
+
+cp file1 file2  
+→ Copy files.  
+Example: cp file.txt backup.txt
+
+wc file.txt  
+→ Count file content.  
+Example: wc file.txt
+
+grep "text" file.txt  
+→ Search text.  
+Example: grep "Error" log.txt
+
+tr 'a-z' 'A-Z'  
+→ Translate characters.  
+Example: echo "hi" | tr 'a-z' 'A-Z'
+
+sort file.txt  
+→ Sort file content.  
+Example: sort names.txt
+
+head -5 file.txt  
+→ View first lines.  
+Example: head -5 file.txt
+
+tail -5 file.txt  
+→ View last lines.  
+Example: tail -5 file.txt
+
+diff file1 file2  
+→ Compare files.  
+Example: diff a.txt b.txt
+
+comm file1 file2  
+→ Compare sorted files.  
+Example: comm file1 file2
+
+less file.txt  
+→ View file.  
+Example: less file.txt
+
+more file.txt  
+→ View file (basic).  
+Example: more file.txt
+
+file test.txt  
+→ Identify file type.  
+Example: file test.txt
+
+type ls  
+→ Show command type.  
+Example: type ls
+
+split -l 100 file.txt  
+→ Split files.  
+Example: split -l 100 log.txt
+
+cmp file1 file2  
+→ Compare binary files.  
+Example: cmp file1 file2
+
+tar -cvf file.tar folder  
+→ Archive files.  
+Example: tar -cvf data.tar folder
+
+find / -name file.txt  
+→ Search files.  
+Example: find /home -name file.txt
+
+vim file.txt  
+→ Text editor.  
+Example: vim notes.txt
+
+gzip file.txt  
+→ Compress file.  
+Example: gzip data.txt
+
+bzip2 file.txt  
+→ Compress file.  
+Example: bzip2 data.txt
+
+unzip file.zip  
+→ Extract zip.  
+Example: unzip project.zip
+
+locate file.txt  
+→ Fast file search.  
+Example: locate config.txt
+
+
+
+
+
+login  
+→ Login to system.  
+Example: login
+
+logout  
+→ Logout session.  
+Example: logout
+
+exit  
+→ Exit shell.  
+Example: exit
+
+groupdel group  
+→ Delete group.  
+Example: sudo groupdel test
+
+chage user  
+→ Manage password expiry.  
+Example: sudo chage user1
+
+chgrp group file  
+→ Change group ownership.  
+Example: chgrp dev file.txt
+
+chfn user  
+→ Change user info.  
+Example: chfn user1
+
+
+
+
+
+
+
+
+df -h  
+→ Disk usage.  
+Example: df -h
+
+du -sh folder  
+→ Directory size.  
+Example: du -sh ProjectData
+
+dmidecode -t memory  
+→ Hardware memory info.  
+Example: sudo dmidecode -t memory
+
+getconf PAGE_SIZE  
+→ Memory page size.  
+Example: getconf PAGE_SIZE
 
