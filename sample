@@ -1,0 +1,262 @@
+echo "System Utilities Practice"  
+→ Prints message on terminal.  
+Example: echo "System Utilities Practice"
+
+clear  
+→ Clears the terminal screen.  
+Example: clear
+
+date  
+→ Displays current date and time.  
+Example: date
+
+uptime  
+→ Shows system running time.  
+Example: uptime
+
+cal  
+→ Displays current month calendar.  
+Example: cal
+
+
+
+
+
+
+
+
+who  
+→ Shows all logged-in users.  
+Example: who
+
+whoami  
+→ Displays current user.  
+Example: whoami
+
+sudo useradd student1  
+→ Creates a new user account.  
+Example: sudo useradd student1
+
+sudo passwd student1  
+→ Sets password for user.  
+Example: sudo passwd student1
+
+sudo usermod -l newname oldname  
+→ Modifies user details (rename).  
+Example: sudo usermod -l studentA student1
+
+sudo groupadd project_team  
+→ Creates a new group.  
+Example: sudo groupadd project_team
+
+sudo gpasswd -a student1 project_team  
+→ Adds user to group.  
+Example: sudo gpasswd -a student1 project_team
+
+sudo groupmod -n new_group project_team  
+→ Renames group.  
+Example: sudo groupmod -n dev_team project_team
+
+login  
+→ Logs into system.  
+Example: login
+
+logout / exit  
+→ Ends session.  
+Example: exit
+
+
+
+
+
+pwd  
+→ Shows current working directory.  
+Example: pwd
+
+ls -la  
+→ Lists all files including hidden ones.  
+Example: ls -la
+
+mkdir ProjectData/Archives  
+→ Creates directory inside ProjectData.  
+Example: mkdir ProjectData/Archives
+
+mv ProjectData/*.bak ProjectData/Archives/  
+→ Moves backup files to Archives folder.  
+Example: mv *.bak Archives/
+
+cp report.txt ../report_backup.txt  
+→ Copies and renames file.  
+Example: cp report.txt ../report_backup.txt
+
+rm temp.txt  
+→ Deletes file.  
+Example: rm temp.txt
+
+rmdir emptydir  
+→ Removes empty directory.  
+Example: rmdir emptydir
+
+chmod 700 file.txt  
+→ Gives full permission only to owner.  
+Example: chmod 700 script.sh
+
+
+
+
+
+grep "Error" logfile.txt > errors.txt  
+→ Searches "Error" and saves output to file.  
+Example: grep "Error" server.log > errors.txt
+
+sort file.txt | head -5  
+→ Sorts file and shows first 5 lines.  
+Example: sort names.txt | head -5
+
+diff config1.txt config2.txt  
+→ Compares two files.  
+Example: diff old.conf new.conf
+
+tar -czvf ProjectData.tar.gz ProjectData/  
+→ Compresses directory into archive.  
+Example: tar -czvf backup.tar.gz ProjectData
+
+find / -name config.txt  
+→ Searches file in system.  
+Example: find /home -name config.txt
+
+
+
+
+vim file.txt  
+→ Opens file in text editor.  
+Example: vim notes.txt
+
+split -l 1000 logfile.txt part_  
+→ Splits large file into smaller parts.  
+Example: split -l 500 log.txt part_
+
+grep -o "Server" file.txt | wc -l  
+→ Counts occurrences of word using piping.  
+Example: grep -o "Server" log.txt | wc -l
+
+unzip file.zip -d /destination  
+→ Extracts zip file to directory.  
+Example: unzip project.zip -d /home/user/
+
+
+
+
+ps aux  
+→ Shows all running processes with CPU & memory usage.  
+Example: ps aux
+
+pstree  
+→ Displays process hierarchy.  
+Example: pstree
+
+pidof python  
+→ Finds PID of python process.  
+Example: pidof python
+
+nice -n 10 command  
+→ Runs process with low priority.  
+Example: nice -n 10 firefox
+
+renice 10 -p 1234  
+→ Changes priority of running process.  
+Example: renice 10 -p 1234
+
+
+
+
+
+
+kill 1234  
+→ Sends normal termination signal.  
+Example: kill 1234
+
+kill -9 1234  
+→ Forcefully kills process.  
+Example: kill -9 1234
+
+pkill firefox  
+→ Kills process by name.  
+Example: pkill firefox
+
+pkill -f pattern  
+→ Kills process using pattern.  
+Example: pkill -f python
+
+xkill  
+→ Click to kill frozen application.  
+Example: xkill
+
+
+
+
+
+
+
+free -h  
+→ Displays memory usage.  
+Example: free -h
+
+cat /proc/meminfo  
+→ Shows detailed memory info.  
+Example: cat /proc/meminfo
+
+top  
+→ Real-time system monitoring.  
+Example: top
+
+htop  
+→ Interactive process viewer.  
+Example: htop
+
+df -h  
+→ Shows disk usage.  
+Example: df -h
+
+
+
+
+
+
+du -sh ProjectData  
+→ Shows size of directory.  
+Example: du -sh ProjectData
+
+vmstat  
+→ Displays memory, CPU, swap stats.  
+Example: vmstat
+
+sudo dmidecode -t memory  
+→ Shows hardware memory details.  
+Example: sudo dmidecode -t memory
+
+sar -r  
+→ Shows historical memory usage.  
+Example: sar -r
+
+getconf PAGE_SIZE  
+→ Displays system page size.  
+Example: getconf PAGE_SIZE
+
+
+
+
+
+
+ps aux --sort=-%mem  
+→ Shows processes sorted by memory usage.  
+Example: ps aux --sort=-%mem | head
+
+free -h  
+→ Compare memory before/after running app.  
+Example: free -h
+
+vmstat  
+→ Check swap usage activity.  
+Example: vmstat
+
