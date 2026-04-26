@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "Enter name of file/directory: "
+read name
+if [ -e "$name" ]; then
+echo "$name exists.
+"
+else
+echo "$name does not exist. Creating it now...
+"
+mkdir "$name"
+fi
+
+nano file_check.sh
+chmod +x file_check.sh
+./file_check.sh
