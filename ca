@@ -78,6 +78,61 @@ else:
 
 
 
+# Aim: Deadlock Avoidance using Banker's Algorithm (Clean Version)
+
+# Fixed example (easy to understand & present)
+processes = ["P0", "P1", "P2"]
+
+alloc = [
+    [1, 0],
+    [0, 1],
+    [1, 1]
+]
+
+max_need = [
+    [2, 1],
+    [1, 2],
+    [2, 2]
+]
+
+avail = [1, 1]
+
+n = len(processes)
+m = len(avail)
+
+# Calculate Need
+need = [[max_need[i][j] - alloc[i][j] for j in range(m)] for i in range(n)]
+
+finish = [False]*n
+safe_seq = []
+
+print("\n===== Banker's Algorithm Execution =====\n")
+
+while len(safe_seq) < n:
+    found = False
+    for i in range(n):
+        if not finish[i]:
+            if all(need[i][j] <= avail[j] for j in range(m)):
+                print(f"{processes[i]} is executing...")
+                
+                for j in range(m):
+                    avail[j] += alloc[i][j]
+                
+                print(f"Available after execution: {avail}\n")
+
+                finish[i] = True
+                safe_seq.append(processes[i])
+                found = True
+
+    if not found:
+        print("❌ System is NOT SAFE (Deadlock possible)")
+        break
+
+if len(safe_seq) == n:
+    print("✅ System is SAFE")
+    print("Safe Sequence →", " → ".join(safe_seq))
+
+
 
 
   # Aim: Demonstrate External Fragmentation
@@ -95,6 +150,8 @@ for p in process:
             break
     if not allocated:
         print(f"Process {p} not allocated (Fragmentation)")
+
+
 
 
 
@@ -163,6 +220,7 @@ if __name__ == "__main__":
     t2.join()
     
     print("Program completed successfully without Deadlock!")
+
 
 
 
