@@ -1,0 +1,23 @@
+# Segment Table: [Base, Limit]
+segment_table = {0: [1000, 500], 1: [2500, 300], 2: [500, 100]}
+
+def translate(seg_id, offset):
+    if seg_id in segment_table:
+        base, limit = segment_table[seg_id]
+        if offset < limit:
+            print(f"Physical Address: {base + offset}")
+        else:
+            print("Trap: Addressing Error (Offset exceeds Limit)")
+    else:
+        print("Invalid Segment ID")
+
+translate(1, 150) # Valid
+translate(2, 120) # Error
+
+
+
+
+nano segmentation.py
+sudo apt update
+sudo apt install python
+python segmentation.py

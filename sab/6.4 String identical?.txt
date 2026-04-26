@@ -1,0 +1,17 @@
+﻿#!/bin/bash
+echo "Enter first string:"
+read str1
+echo "Enter second string:"
+read str2
+if [ "$str1" = "$str2" ] 
+then
+    echo "Strings are Equal"
+else
+    echo "Strings are Not Equal" 
+fi 
+
+
+touch string_comp.sh
+vim string_comp.sh
+chmod +x string_comp.sh
+./string_comp.sh

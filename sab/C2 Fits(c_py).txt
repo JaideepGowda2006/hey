@@ -1,0 +1,32 @@
+def allocate(blocks, processes):
+    for strategy in ['First Fit', 'Best Fit', 'Worst Fit']:
+        print(f"\n--- {strategy} ---")
+        temp_blocks = blocks[:]
+        for p in processes:
+            idx = -1
+            if strategy == 'First Fit':
+                for i, b in enumerate(temp_blocks):
+                    if b >= p: idx = i; break
+            elif strategy == 'Best Fit':
+                # Smallest block that fits
+                fits = [(i, b) for i, b in enumerate(temp_blocks) if b >= p]
+                if fits: idx = min(fits, key=lambda x: x[1])[0]
+            elif strategy == 'Worst Fit':
+                # Largest block available
+                fits = [(i, b) for i, b in enumerate(temp_blocks) if b >= p]
+                if fits: idx = max(fits, key=lambda x: x[1])[0]
+
+            if idx != -1:
+                print(f"Process {p} -> Block {temp_blocks[idx]}")
+                temp_blocks[idx] -= p
+            else:
+                print(f"Process {p} -> Not Allocated")
+
+allocate([100, 500, 200, 300, 600], [212, 417, 112, 426])
+
+
+
+
+
+nano alloc.py 
+python3 alloc.py

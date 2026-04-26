@@ -1,0 +1,106 @@
+﻿#!/bin/bash
+echo "Enter number of processes:"
+read n
+
+
+# Input Burst Times
+for (( i=0; i<n; i++ ))
+do
+    echo "Enter Burst Time for P$((i+1)):"
+    read bt[$i]
+    rem_bt[$i]=${bt[$i]} # Backup for Round Robin
+done
+
+
+# --- FCFS Section ---
+echo "--- First Come First Served (FCFS) ---"
+wt[0]=0
+for (( i=1; i<n; i++ ))
+do
+    wt[$i]=$((wt[i-1] + bt[i-1]))
+done
+
+
+echo "Process   BT   WT   TAT"
+for (( i=0; i<n; i++ ))
+do
+    tat[$i]=$((bt[i] + wt[i]))
+    echo "P$((i+1))        ${bt[$i]}    ${wt[$i]}    ${tat[$i]}"
+done
+
+
+echo "" # Empty line for clarity
+
+
+# --- Round Robin Section ---
+echo "--- Round Robin (RR) ---"
+echo "Enter Time Quantum:"
+read tq
+t=0
+while [ 1 ]
+do
+    done=1
+    for (( i=0; i<n; i++ ))
+    do
+        if [ ${rem_bt[$i]} -gt 0 ]
+        then
+            done=0
+            if [ ${rem_bt[$i]} -gt $tq ]
+            then
+                t=$((t + tq))
+                rem_bt[$i]=$((rem_bt[$i] - tq))
+            else
+                t=$((t + rem_bt[$i]))
+                wt_rr[$i]=$((t - bt[i]))
+                rem_bt[$i]=0
+            fi
+        fi
+    done
+    if [ $done -eq 1 ]
+    then
+        break
+    fi
+done
+
+
+echo "Process   BT   WT   TAT"
+for (( i=0; i<n; i++ ))
+do
+    tat_rr[$i]=$((bt[i] + wt_rr[i]))
+    echo "P$((i+1))        ${bt[$i]}    ${wt_rr[$i]}    ${tat_rr[$i]}"
+done
+
+
+touch scheduling.sh
+vim scheduling.sh
+chmod +x scheduling.sh
+./scheduling.sh
+
+
+Inputs
+1. Number of Processes
+* Input: Usually a small integer like 3 or 4 .
+* Purpose: This tells the script how many iterations the for loops should run.
++1
+2. Burst Time (BT)
+   * Input: A series of integers representing the time (in milliseconds or cycles) each process needs to complete.
+   * Example Input:
+   * P1: 10
+   * P2: 5
+   * P3: 8
+   * Purpose: Burst time is used in the arithmetic operation $((bt[i] + wt[i])) to calculate the Turnaround Time (TAT).
++3
+3. Time Quantum (TQ)
+      * Input: A small integer, typically smaller than your largest Burst Time (e.g., 2 or 3).
+      * Purpose: In the Round Robin section, this value is used to decrement the remaining burst time: rem_bt[$i]=$((rem_bt[$i] - tq)). If you enter a Time Quantum larger than your largest Burst Time, the Round Robin output will look exactly like the FCFS output because no process will be interrupted.
++1
+Example Test Case
+To see the difference between the two, try these specific inputs:
+         1. Enter number of processes: 3
+         2. Burst Time for P1: 24
+         3. Burst Time for P2: 3
+         4. Burst Time for P3: 3
+         5. Enter Time Quantum: 4
+What to look for:
+         * FCFS: Will simply run them in order (P1 finished at 24, P2 at 27, P3 at 30).
+         * Round Robin: Will give P1 4ms, then move to P2, then P3, then back to P1. This will result in much higher Waiting Times (WT) for P1 compared to FCFS.

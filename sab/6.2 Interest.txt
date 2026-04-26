@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Enter Principal, Rate, and Time: "
+read p r t
+si=$(echo "scale=2; ($p * $r * $t) / 100" | bc)
+echo "Simple Interest: $si"
+ci=$(echo "scale=2; $p * ((1 + $r/100) ^ $t) - $p" | bc -l)
+echo "Compound Interest: $ci"
+
+
+nano interest.sh
+chmod +x interest.sh
+./interest.sh

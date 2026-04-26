@@ -1,0 +1,21 @@
+import threading
+
+# Define the locks
+res_a = threading.Lock()
+res_b = threading.Lock()
+
+def thread_safe():
+    with res_a:
+        print("Locked A")
+        with res_b:
+            print("Locked B")
+
+# To run it:
+t1 = threading.Thread(target=thread_safe)
+t1.start()
+
+
+
+
+nano prevent.py
+python3 prevent.py

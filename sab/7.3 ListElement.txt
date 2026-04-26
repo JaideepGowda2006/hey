@@ -1,0 +1,67 @@
+Predefined list
+#!/bin/bash
+list="10 20 30 40 50"
+echo "Enter element to search:"
+read e
+f=0
+for i in $list; do
+    if [ $i -eq $e ]; then f=1; break; fi
+done
+if [ $f -eq 1 ]; then echo "Found"; else echo "Not Found"; fi
+
+
+nano search.sh
+chmod +x search.sh
+./search.sh
+
+
+
+
+
+
+Input list
+#!/bin/bash
+echo "How many items in the list?"
+read n
+echo "Enter $n items:"
+
+
+# Loop to take input
+for (( i=1; i<=n; i++ ))
+do
+    read item
+    list="$list $item"
+done
+
+
+echo "Your list is: $list"
+
+
+# Example: Search in the list
+echo "Enter element to search:"
+read e
+found=0
+for i in $list
+do
+    if [ $i -eq $e ]
+    then
+        found=1
+        break
+    fi
+done
+
+
+if [ $found -eq 1 ]
+then
+    echo "Element Found"
+else
+    echo "Element Not Found"
+fi
+
+
+
+
+touch list_input.sh
+vim list_input.sh
+chmod +x list_input.sh
+./list_input.sh

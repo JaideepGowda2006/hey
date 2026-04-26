@@ -1,0 +1,35 @@
+def bankers_algorithm():
+    # P0, P1, P2
+    allocation = [[0, 1, 0], [2, 0, 0], [3, 0, 2]]
+    max_need = [[7, 5, 3], [3, 2, 2], [9, 0, 2]]
+    available = [3, 3, 2]
+    
+    n = len(allocation)
+    m = len(available)
+    need = [[max_need[i][j] - allocation[i][j] for j in range(m)] for i in range(n)]
+    
+    finish = [False] * n
+    safe_seq = []
+    work = available[:]
+    
+    for _ in range(n):
+        for i in range(n):
+            if not finish[i] and all(need[i][j] <= work[j] for j in range(m)):
+                for j in range(m): work[j] += allocation[i][j]
+                finish[i] = True
+                safe_seq.append(f"P{i}")
+                break
+                
+    if len(safe_seq) == n:
+        print("Safe System! Sequence:", " -> ".join(safe_seq))
+    else:
+        print("System is in Unsafe State!")
+
+bankers_algorithm()
+
+
+
+nano banker.py
+sudo apt update
+sudo apt install python
+python3 banker.py

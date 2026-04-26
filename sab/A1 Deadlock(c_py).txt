@@ -1,0 +1,32 @@
+import threading
+import time
+
+res_a = threading.Lock()
+res_b = threading.Lock()
+
+def thread_1():
+    with res_a:
+        print("Thread 1: Locked Resource A")
+        time.sleep(1) # Ensure Thread 2 locks B
+        print("Thread 1: Waiting for Resource B...")
+        with res_b:
+            print("Thread 1: Locked Resource B")
+
+def thread_2():
+    with res_b:
+        print("Thread 2: Locked Resource B")
+        time.sleep(1) # Ensure Thread 1 locks A
+        print("Thread 2: Waiting for Resource A...")
+        with res_a:
+            print("Thread 2: Locked Resource A")
+
+t1 = threading.Thread(target=thread_1)
+t2 = threading.Thread(target=thread_2)
+t1.start()
+t2.start()
+
+
+
+
+nano deadlock.py
+python3 deadlock.py

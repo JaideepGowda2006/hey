@@ -1,0 +1,28 @@
+﻿List predefined files
+#!/bin/bash
+echo "Current directory specific files (.txt and .sh):"
+ls | egrep '\.txt$|\.sh$'
+
+
+touch list_files.sh
+vim list_files.sh
+chmod +x list_files.sh
+./list_files.sh
+
+
+
+
+
+
+User input
+#!/bin/bash
+echo "Enter the file extension to search (e.g., txt or sh):"
+read ext
+echo "List of files with .$ext extension:"
+ls | egrep "\.$ext$"
+
+
+touch search_ext.sh
+vim search_ext.sh
+chmod +x search_ext.sh
+./search_ext.sh

@@ -1,0 +1,19 @@
+﻿#!/bin/bash
+res1="Held_by_P1"
+res2="Held_by_P2"
+echo "Demonstrating Deadlock Condition..."
+echo "P1 has $res1 and wants $res2"
+echo "P2 has $res2 and wants $res1"
+
+
+if [ "$res1" = "Held_by_P1" ] && [ "$res2" = "Held_by_P2" ]
+then
+    echo "DEADLOCK: Neither P1 nor P2 can proceed!"
+    echo "Both processes are waiting indefinitely."
+fi
+
+
+touch deadlock.sh
+vim deadlock.sh
+chmod +x deadlock.sh
+./deadlock.sh

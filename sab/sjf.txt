@@ -1,0 +1,35 @@
+﻿SJF NON PREMPTIVE
+#!/bin/bash
+echo "Enter number of processes:"
+read n
+for (( i=0; i<n; i++ ))
+do
+    p[$i]=$((i+1))
+    echo "Enter Burst Time for P$((i+1)):"
+    read bt[$i]
+done
+for (( i=0; i<n; i++ ))
+do
+    for (( j=i+1; j<n; j++ ))
+    do
+        if [ ${bt[$i]} -gt ${bt[$j]} ]
+        then
+            t=${bt[$i]}; bt[$i]=${bt[$j]}; bt[$j]=$t
+            t=${p[$i]}; p[$i]=${p[$j]}; p[$j]=$t
+        fi
+    done
+done
+wt[0]=0
+echo "Process   BT   WT   TAT"
+for (( i=0; i<n; i++ ))
+do
+    tat[$i]=$((bt[i] + wt[i]))
+    echo "P${p[$i]}        ${bt[$i]}    ${wt[$i]}    ${tat[$i]}"
+    wt[$((i+1))]=$((wt[i] + bt[i]))
+done
+
+
+touch sjf.sh
+vim sjf.sh
+chmod +x sjf.sh
+./sjf.sh

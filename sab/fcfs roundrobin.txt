@@ -1,0 +1,105 @@
+processes = [
+('P1'
+, 5),
+('P2'
+, 8),
+('P3'
+, 12)
+]
+def fcfs(processes):
+print("\n--- First-Come, First-Served (FCFS) ---
+")
+waiting_
+time = 0
+total
+_
+waiting = 0
+total
+turnaround = 0
+_
+n = len(processes)
+for pid, burst in processes:
+turnaround
+_
+time = waiting_
+time + burst
+print(f"{pid}: Waiting Time = {waiting_
+time}, Turnaround Time = {turnaround
+_
+total
+_
+waiting += waiting_
+time
+total
+turnaround += turnaround
+time
+_
+_
+waiting_
+time += burst
+time}")
+print(f"Average Waiting Time = {total
+_
+waiting/n:.2f}")
+print(f"Average Turnaround Time = {total
+_
+turnaround/n:.2f}")
+def round
+_
+robin(processes, quantum):
+print(f"\n--- Round Robin Scheduling (Quantum = {quantum}) ---
+")
+remaining = {pid: burst for pid, burst in processes}
+time = 0
+turnaround
+_
+times = {}
+queue = [pid for pid, _
+in processes]
+while queue:
+pid = queue.pop(0)
+if remaining[pid] > quantum:
+time += quantum
+remaining[pid] -= quantum
+queue.append(pid)
+else:
+time += remaining[pid]
+remaining[pid] = 0
+turnaround
+_
+times[pid] = time
+n = len(processes)
+total
+wait = 0
+_
+total
+tat = 0
+_
+for pid, burst in processes:
+tat = turnaround
+_
+times[pid]
+wait = tat - burst
+total
+wait += wait
+_
+total
+tat += tat
+_
+print(f"{pid}: Waiting Time = {wait}, Turnaround Time = {tat}")
+print(f"Average Waiting Time = {total
+_
+wait/n:.2f}")
+print(f"Average Turnaround Time = {total
+_
+tat/n:.2f}")
+fcfs(processes)
+round
+_
+robin(processes, quantum=4)
+
+
+
+
+nano process.py
+python3 process.py

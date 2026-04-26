@@ -1,0 +1,46 @@
+﻿rr
+#!/bin/bash
+echo "Enter number of processes:"
+read n
+for (( i=0; i<n; i++ ))
+do
+    echo "Enter Burst Time for P$((i+1)):"
+    read bt[$i]
+    rem_bt[$i]=${bt[$i]}
+done
+echo "Enter Time Quantum:"
+read tq
+t=0
+while [ 1 ]
+do
+    done=1
+    for (( i=0; i<n; i++ ))
+    do
+        if [ ${rem_bt[$i]} -gt 0 ]
+        then
+            done=0
+            if [ ${rem_bt[$i]} -gt $tq ]
+            then
+                t=$((t + tq))
+                rem_bt[$i]=$((rem_bt[$i] - tq))
+            else
+                t=$((t + rem_bt[$i]))
+                wt[$i]=$((t - bt[i]))
+                rem_bt[$i]=0
+            fi
+        fi
+    done
+    if [ $done -eq 1 ]; then break; fi
+done
+echo "Process   BT   WT   TAT"
+for (( i=0; i<n; i++ ))
+do
+    tat[$i]=$((bt[i] + wt[i]))
+    echo "P$((i+1))        ${bt[$i]}    ${wt[$i]}    ${tat[$i]}"
+done
+
+
+touch rr.sh
+vim rr.sh
+chmod +x rr.sh
+./rr.sh

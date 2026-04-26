@@ -1,0 +1,46 @@
+import threading
+import time
+import random
+
+# Shared buffer
+buffer = []
+buffer_size = 5
+
+# Semaphores
+empty = threading.Semaphore(buffer_size)  # Tracks empty slots
+full = threading.Semaphore(0)             # Tracks filled slots
+mutex = threading.Semaphore(1)            # Ensures mutual exclusion
+
+def producer():
+    while True:
+        item = random.randint(1, 100)
+        empty.acquire()
+        mutex.acquire()
+        buffer.append(item)
+        print(f"Producer produced: {item}")
+        mutex.release()
+        full.release()
+        time.sleep(random.uniform(0.5, 1.5))
+
+def consumer():
+    while True:
+        full.acquire()
+        mutex.acquire()
+        item = buffer.pop(0)
+        print(f"Consumer consumed: {item}")
+        mutex.release()
+        empty.release()
+        time.sleep(random.uniform(0.5, 1.5))
+
+# Threads
+t1 = threading.Thread(target=producer)
+t2 = threading.Thread(target=consumer)
+
+t1.start()
+t2.start()
+
+
+
+
+nano semophore.py
+python3 semophore.py

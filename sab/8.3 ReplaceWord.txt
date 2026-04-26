@@ -1,0 +1,15 @@
+﻿#!/bin/bash
+echo "Enter file name:"
+read file
+echo "Enter old word:"
+read old
+echo "Enter new word:"
+read new
+sed -i "s/$old/$new/g" $file
+echo "Word Replaced Successfully"
+
+
+touch sed_replace.sh
+vim sed_replace.sh
+chmod +x sed_replace.sh
+./sed_replace.sh

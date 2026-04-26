@@ -1,0 +1,23 @@
+﻿#!/bin/bash
+fork1=0; fork2=0; fork3=0
+echo "Dining Philosophers (3 Philosophers, 3 Forks)"
+for (( i=1; i<=3; i++ ))
+do
+    # Philosopher 1 needs fork1 and fork2
+    if [ $fork1 -eq 0 ] && [ $fork2 -eq 0 ]
+    then
+        fork1=1; fork2=1
+        echo "Philosopher 1 is Eating"
+        sleep 1
+        fork1=0; fork2=0
+        echo "Philosopher 1 finished"
+    else
+        echo "Philosopher 1 is Thinking (Forks busy)"
+    fi
+done
+
+
+touch philosophers.sh
+vim philosophers.sh
+chmod +x philosophers.sh
+./philosophers.sh

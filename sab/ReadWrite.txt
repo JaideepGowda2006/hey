@@ -1,0 +1,38 @@
+﻿#!/bin/bash
+readers=0
+writer_active=0
+echo "Reader-Writer Simulation"
+for (( i=1; i<=5; i++ ))
+do
+    action=$((RANDOM % 2))
+    if [ $action -eq 0 ]
+    then
+        if [ $writer_active -eq 0 ]
+        then
+            readers=$((readers + 1))
+            echo "Reader $i entered. Total Readers: $readers"
+            sleep 1
+            readers=$((readers - 1))
+            echo "Reader $i left. Total Readers: $readers"
+        else
+            echo "Reader $i waiting... Writer is active!"
+        fi
+    else
+        if [ $writer_active -eq 0 ] && [ $readers -eq 0 ]
+        then
+            writer_active=1
+            echo "Writer $i is writing data..."
+            sleep 1
+            writer_active=0
+            echo "Writer $i finished writing."
+        else
+            echo "Writer $i waiting... Resource busy!"
+        fi
+    fi
+done
+
+
+touch reader_writer.sh
+vim reader_writer.sh
+chmod +x reader_writer.sh
+./reader_writer.sh

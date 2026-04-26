@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Enter file name to check for duplicates:"
+read file
+sed -n 'N;/^\(.*\)\n\1$/p' $file
+
+
+nano find_dupes.sh
+chmod +x find_dupes.sh
+./find_dupes.sh

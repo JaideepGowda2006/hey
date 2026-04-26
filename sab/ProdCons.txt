@@ -1,0 +1,33 @@
+﻿#!/bin/bash
+buffer=0
+max=5
+echo "Producer-Consumer Simulation (Max Buffer: $max)"
+for (( i=1; i<=10; i++ ))
+do
+    action=$((RANDOM % 2))
+    if [ $action -eq 0 ]
+    then
+        if [ $buffer -lt $max ]
+        then
+            buffer=$((buffer + 1))
+            echo "Producer added item. Buffer: $buffer"
+        else
+            echo "Buffer Full! Producer is waiting..."
+        fi
+    else
+        if [ $buffer -gt 0 ]
+        then
+            buffer=$((buffer - 1))
+            echo "Consumer removed item. Buffer: $buffer"
+        else
+            echo "Buffer Empty! Consumer is waiting..."
+        fi
+    fi
+    sleep 1
+done
+
+
+touch producer_consumer.sh
+vim producer_consumer.sh
+chmod +x producer_consumer.sh
+./producer_consumer.sh

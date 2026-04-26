@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Enter file name:"
+read file
+echo "Lines:"
+grep -c "" $file
+echo "Words:"
+wc -w < $file
+echo "Characters:"
+wc -c < $file
+
+
+nano file_stats.sh
+chmod +x file_stats.sh
+./file_stats.sh

@@ -1,0 +1,23 @@
+def external_frag():
+    total_mem = 100
+    # Allocate 3 blocks
+    blocks = {"B1": 30, "B2": 40, "B3": 30}
+    print(f"Allocated: {blocks}")
+    
+    # Free the middle block
+    del blocks["B2"]
+    print("Freeing B2 (40 units)...")
+    
+    request = 50
+    print(f"New Request: {request} units")
+    if request > 40:
+        print(f"Status: Cannot allocate! Largest free block is 40, though total free is 70.")
+        print("This is External Fragmentation.")
+
+external_frag()
+
+
+nano extfrag.py
+sudo apt update
+sudo apt install python
+python3 extfrag.py

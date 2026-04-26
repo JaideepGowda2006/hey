@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Current Directory:"
+pwd
+echo "Directory Contents:"
+ls
+mkdir NewFolder
+echo "Sample content" > NewFolder/file.txt
+cp -r NewFolder ~/
+echo "Operations Completed"
+
+
+nano dir_ops.sh
+chmod +x dir_ops.sh
+./dir_ops.sh

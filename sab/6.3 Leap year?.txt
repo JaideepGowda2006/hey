@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Enter year:"
+read year
+if [ $((year % 4)) -eq 0 ] 
+then
+    echo "Leap Year"
+else
+    echo "Not a Leap Year" 
+fi 
+
+
+nano leap.sh - edit file
+chmod +x leap.sh - make it executable
+./leap.sh - execute it
