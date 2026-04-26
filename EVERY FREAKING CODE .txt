@@ -1,0 +1,519 @@
+﻿1)FCFS AND ROUND ROBIN 
+# CPU Scheduling Algorithms: FCFS and Round Robin
+# Process data: (Process ID, Burst Time)
+processes = [
+    ('P1', 5),
+    ('P2', 8),
+    ('P3', 12)
+]
+
+
+#--- FCFS Scheduling ---
+def fcfs(processes):
+    print("\n--- First-Come, First-Served (FCFS) ---")
+    waiting_time = 0
+    total_waiting = 0
+    total_turnaround = 0
+    
+    for i, (pid, burst) in enumerate(processes):
+        current_turnaround = waiting_time + burst
+        print(f"{pid}: Waiting Time = {waiting_time}, Turnaround Time = {current_turnaround}")
+        
+        total_waiting += waiting_time
+        total_turnaround += current_turnaround
+        waiting_time += burst
+        
+    n = len(processes)
+    print(f"Average Waiting Time = {total_waiting/n:.2f}")
+    print(f"Average Turnaround Time = {total_turnaround/n:.2f}")
+
+
+#--- Round Robin Scheduling ---
+def round_robin(processes, quantum):
+    print("\n--- Round Robin Scheduling ---")
+    remaining = {pid: burst for pid, burst in processes}
+    time = 0
+    waiting_times = {pid: 0 for pid, _ in processes}
+    turnaround_times = {}
+    queue = [pid for pid, _ in processes]
+    
+    while queue:
+        pid = queue.pop(0)
+        if remaining[pid] > quantum:
+            time += quantum
+            remaining[pid] -= quantum
+            queue.append(pid)
+        else:
+            time += remaining[pid]
+            remaining[pid] = 0
+            turnaround_times[pid] = time
+            
+    # Calculate waiting times
+    for pid, burst in processes:
+        waiting_times[pid] = turnaround_times[pid] - burst
+        
+    # Print results
+    for pid, _ in processes:
+        print(f"{pid}: Waiting Time = {waiting_times[pid]}, Turnaround Time = {turnaround_times[pid]}")
+        
+    n = len(processes)
+    avg_waiting = sum(waiting_times.values()) / n
+    avg_turnaround = sum(turnaround_times.values()) / n
+    print(f"Average Waiting Time = {avg_waiting:.2f}")
+    print(f"Average Turnaround Time = {avg_turnaround:.2f}")
+
+
+# Run both algorithms
+fcfs(processes)
+round_robin(processes, quantum=4)
+
+2)PROCESS SYNCHRONIZATION (SEMAPHORE PRACTICAL 10)
+import threading # [cite: 12]
+import time # [cite: 13]
+import random # [cite: 14]
+
+
+# Shared buffer
+buffer = [] # [cite: 15, 16]
+buffer_size = 5 # [cite: 17]
+
+
+# Semaphores
+empty = threading.Semaphore(buffer_size) # Tracks empty slots [cite: 18, 19]
+full = threading.Semaphore(0)            # Tracks filled slots 
+mutex = threading.Semaphore(1)           # Ensures mutual exclusion 
+
+
+def producer(): # [cite: 24]
+    while True: # [cite: 25]
+        item = random.randint(1, 100) # 
+        
+        empty.acquire() # 
+        mutex.acquire() # 
+        
+        buffer.append(item) # 
+        print(f"Producer produced: {item}") # [cite: 30]
+        
+        mutex.release() # 
+        full.release() # 
+        
+        time.sleep(random.uniform(0.5, 1.5)) # [cite: 33]
+
+
+def consumer(): # [cite: 34]
+    while True: # [cite: 35]
+        full.acquire() # 
+        mutex.acquire() # 
+        
+        item = buffer.pop(0) # 
+        print(f"Consumer consumed: {item}") # [cite: 39, 40]
+        
+        mutex.release() # 
+        empty.release() # 
+        
+        time.sleep(random.uniform(0.5, 1.5)) # [cite: 43]
+
+
+# Threads
+t1 = threading.Thread(target=producer) # [cite: 44, 45]
+t2 = threading.Thread(target=consumer) # [cite: 46]
+
+
+t1.start() # [cite: 47]
+t2.start() # [cite: 48]
+
+
+
+3)External Fragmentation
+
+# 1 = Memory is Occupied, 0 = Memory is Free
+# Think of these as block sizes of memory (or groups of chairs)
+block_sizes = [20, 20, 20, 20, 20] 
+is_allocated = [1,  0,  1,  0,  1]  
+
+
+process_request = 40 # We need 40 units of contiguous memory
+
+
+total_free_space = 0
+max_contiguous_space = 0
+current_contiguous = 0
+
+
+# Loop through all memory blocks to check the space
+for i in range(len(block_sizes)):
+    if is_allocated[i] == 0:
+        # The block is free, add it to our counters
+        total_free_space += block_sizes[i]
+        current_contiguous += block_sizes[i]
+        
+        # Update the maximum contiguous block we've found so far
+        if current_contiguous > max_contiguous_space:
+            max_contiguous_space = current_contiguous
+    else:
+        # The block is taken, reset our contiguous counter to zero
+        current_contiguous = 0
+
+
+print(f"Total Free Memory: {total_free_space}")
+print(f"Largest Contiguous Block: {max_contiguous_space}")
+print(f"Requested Memory: {process_request}")
+
+
+# The Core Logic Check
+if process_request <= total_free_space and process_request > max_contiguous_space:
+    print("Result: External Fragmentation occurred! Cannot allocate.")
+elif process_request <= max_contiguous_space:
+    print("Result: Memory allocated successfully.")
+else:
+    print("Result: Not enough absolute memory.")
+
+
+
+4)BEST , FIRST AND WORST FIT ALGO 
+# --- FIRST FIT ---
+def first_fit(block_sizes, process_sizes):
+    allocation = [-1] * len(process_sizes)
+    
+    for i in range(len(process_sizes)):
+        for j in range(len(block_sizes)):
+            if block_sizes[j] >= process_sizes[i]:
+                allocation[i] = j
+                block_sizes[j] -= process_sizes[i]
+                break # We found the FIRST fit, so stop looking!
+
+
+    print("Process No.\tProcess Size\tBlock No.")
+    for i in range(len(process_sizes)):
+        if allocation[i] != -1:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\t{allocation[i] + 1}")
+        else:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\tNot Allocated")
+
+
+# --- BEST FIT ---
+def best_fit(block_sizes, process_sizes):
+    allocation = [-1] * len(process_sizes)
+    
+    for i in range(len(process_sizes)):
+        best_idx = -1 # Start by assuming we haven't found a fit
+        
+        for j in range(len(block_sizes)):
+            if block_sizes[j] >= process_sizes[i]:
+                # If we haven't found one yet, OR if this new locker is SMALLER than our current best locker
+                if best_idx == -1 or block_sizes[j] < block_sizes[best_idx]:
+                    best_idx = j # Update our choice
+                    
+        # After checking ALL lockers, if we found a fit, allocate it
+        if best_idx != -1:
+            allocation[i] = best_idx
+            block_sizes[best_idx] -= process_sizes[i]
+
+
+    print("Process No.\tProcess Size\tBlock No.")
+    for i in range(len(process_sizes)):
+        if allocation[i] != -1:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\t{allocation[i] + 1}")
+        else:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\tNot Allocated")
+
+
+# --- WORST FIT ---
+def worst_fit(block_sizes, process_sizes):
+    allocation = [-1] * len(process_sizes)
+    
+    for i in range(len(process_sizes)):
+        worst_idx = -1 # Start by assuming we haven't found a fit
+        
+        for j in range(len(block_sizes)):
+            if block_sizes[j] >= process_sizes[i]:
+                # If we haven't found one yet, OR if this new locker is BIGGER than our current worst locker
+                if worst_idx == -1 or block_sizes[j] > block_sizes[worst_idx]:
+                    worst_idx = j # Update our choice
+                    
+        # After checking ALL lockers, if we found a fit, allocate it
+        if worst_idx != -1:
+            allocation[i] = worst_idx
+            block_sizes[worst_idx] -= process_sizes[i]
+
+
+    print("Process No.\tProcess Size\tBlock No.")
+    for i in range(len(process_sizes)):
+        if allocation[i] != -1:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\t{allocation[i] + 1}")
+        else:
+            print(f"{i + 1}\t\t{process_sizes[i]}\t\tNot Allocated")
+
+
+# ==========================================
+# MAIN EXECUTION BLOCK
+# ==========================================
+if __name__ == "__main__":
+    # Our starting lockers and backpacks
+    blocks = [200, 400, 300, 500]
+    processes = [250, 150]
+    
+    print("----- FIRST FIT ALLOCATION -----")
+    # We use .copy() so First Fit doesn't permanently ruin the blocks array for the others
+    first_fit(blocks.copy(), processes)
+    
+    print("\n----- BEST FIT ALLOCATION -----")
+    best_fit(blocks.copy(), processes)
+    
+    print("\n----- WORST FIT ALLOCATION -----")
+    worst_fit(blocks.copy(), processes)
+
+
+5)Deadlock Simulation 
+import threading
+import time
+
+
+# Creating our two resources (locks)
+database = threading.Lock()
+api_key = threading.Lock()
+
+
+# Harsh's Process (Thread 1)
+def harsh_process():
+    database.acquire()
+    print("Harsh locked the Database.")
+    
+    time.sleep(1) 
+    
+    print("Harsh is waiting for the API Key...")
+    api_key.acquire() 
+    
+    print("Harsh got both! (This won't print)")
+    api_key.release()
+    database.release()
+
+
+# Himanshi's Process (Thread 2)
+def himanshi_process():
+    api_key.acquire()
+    print("Himanshi locked the API Key.")
+    
+    time.sleep(1)
+    
+    print("Himanshi is waiting for the Database...")
+    database.acquire() 
+    
+    print("Himanshi got both! (This won't print either)")
+    database.release()
+    api_key.release()
+
+
+if __name__ == "__main__":
+    # Define the threads
+    thread1 = threading.Thread(target=harsh_process)
+    thread2 = threading.Thread(target=himanshi_process)
+    
+    # Start both threads simultaneously
+    thread1.start()
+    thread2.start()
+    
+    # Tell the main program to wait for the threads to finish
+    thread1.join()
+    thread2.join()
+
+
+6)Logical to Physical Address Translation Using Segmentation 
+
+def translate_address(segment_table, segment_no, offset):
+    # Check if the requested segment exists in our table
+    if segment_no in segment_table:
+        # Extract the base address and the maximum limit of this segment
+        base_address = segment_table[segment_no]['base']
+        limit = segment_table[segment_no]['limit']
+        
+        # Check if the offset is within the legal limit of the segment
+        if offset < limit:
+            # Calculate the actual physical address in RAM
+            physical_address = base_address + offset
+            print(f"[SUCCESS] Logical Address (Segment: {segment_no}, Offset: {offset})")
+            print(f"          Translated to Physical Address: {base_address} + {offset} = {physical_address}\n")
+        else:
+            # The process tried to access memory outside its allowed segment
+            print(f"[ERROR]   Logical Address (Segment: {segment_no}, Offset: {offset})")
+            print(f"          Segmentation Fault! Offset ({offset}) exceeds limit ({limit}).\n")
+    else:
+        print(f"[ERROR]   Segment {segment_no} does not exist in the Segment Table.\n")
+
+
+if __name__ == "__main__":
+    # Our Segment Table Dictionary: {Segment No: {'base': Base Address, 'limit': Limit}}
+    segment_table = {
+        0: {'base': 1400, 'limit': 1000},
+        1: {'base': 6300, 'limit': 400},
+        2: {'base': 4300, 'limit': 400},
+        3: {'base': 3200, 'limit': 1100},
+        4: {'base': 4700, 'limit': 1000}
+    }
+    
+    print("--- SEGMENTATION ADDRESS TRANSLATION ---")
+    # Test 1: Valid address
+    translate_address(segment_table, segment_no=2, offset=53)
+    
+    # Test 2: Valid address
+    translate_address(segment_table, segment_no=3, offset=852)
+    
+    # Test 3: Invalid address (Offset > Limit) -> Triggers Segmentation Fault
+    translate_address(segment_table, segment_no=1, offset=500)
+    
+    # Test 4: Segment doesn't exist
+    translate_address(segment_table, segment_no=9, offset=100)
+
+
+
+
+7)Prevent Deadlock by Eliminating Circular Wait 
+
+import threading
+import time
+
+
+# Create our locks (resources)
+lock_1 = threading.Lock()
+lock_2 = threading.Lock()
+
+
+def process_a():
+    print("Process A is requesting Lock 1...")
+    lock_1.acquire()
+    print("Process A acquired Lock 1.")
+    
+    time.sleep(1) # Simulating work
+    
+    print("Process A is requesting Lock 2...")
+    lock_2.acquire()
+    print("Process A acquired Lock 2. Executing critical section!")
+    
+    # Release in reverse order
+    lock_2.release()
+    lock_1.release()
+    print("Process A finished and released all locks.\n")
+
+
+def process_b():
+    # To prevent deadlock, Process B MUST ALSO request Lock 1 first.
+    # If it requested Lock 2 first, we would get the exact deadlock we simulated earlier.
+    print("Process B is requesting Lock 1...")
+    lock_1.acquire()
+    print("Process B acquired Lock 1.")
+    
+    time.sleep(1) # Simulating work
+    
+    print("Process B is requesting Lock 2...")
+    lock_2.acquire()
+    print("Process B acquired Lock 2. Executing critical section!")
+    
+    # Release in reverse order
+    lock_2.release()
+    lock_1.release()
+    print("Process B finished and released all locks.\n")
+
+
+if __name__ == "__main__":
+    print("--- DEADLOCK PREVENTION (CIRCULAR WAIT ELIMINATED) ---\n")
+    
+    t1 = threading.Thread(target=process_a)
+    t2 = threading.Thread(target=process_b)
+    
+    t1.start()
+    t2.start()
+    
+    t1.join()
+    t2.join()
+    
+    print("Program completed successfully without Deadlock!")
+
+
+
+8)Bankers algorithm (itna easy code hai khudse karo)
+
+
+def bankers_algorithm(processes, available, maximum, allocation):
+    num_processes = len(processes)
+    num_resources = len(available)
+    
+    # Step 1: Calculate the Need Matrix (Need = Maximum - Allocation)
+    need = [[0] * num_resources for _ in range(num_processes)]
+    for i in range(num_processes):
+        for j in range(num_resources):
+            need[i][j] = maximum[i][j] - allocation[i][j]
+            
+    print("Need Matrix:")
+    for i in range(num_processes):
+        print(f"P{processes[i]}: {need[i]}")
+    print("-" * 30)
+            
+    # Step 2: Initialize tracking arrays for the Safety Algorithm
+    finish = [False] * num_processes
+    safe_sequence = []
+    work = available.copy()
+    
+    # Step 3: Run the Safety Algorithm
+    count = 0
+    while count < num_processes:
+        found_safe_process = False
+        
+        for p in range(num_processes):
+            # If the process isn't finished yet
+            if not finish[p]:
+                # Check if its needs can be met with current 'work' (available resources)
+                can_allocate = True
+                for j in range(num_resources):
+                    if need[p][j] > work[j]:
+                        can_allocate = False
+                        break
+                
+                # If needs can be met, simulate executing the process
+                if can_allocate:
+                    for k in range(num_resources):
+                        # Add its currently held allocations back to the available pool
+                        work[k] += allocation[p][k]
+                        
+                    safe_sequence.append(processes[p])
+                    finish[p] = True
+                    found_safe_process = True
+                    count += 1
+                    
+        # If we loop through all processes and can't find a single one that can run safely
+        if not found_safe_process:
+            print("\n[RESULT] System is in an UNSAFE state! Deadlock may occur.")
+            return False
+            
+    # If the while loop completes, we found a safe sequence for everyone
+    print("\n[RESULT] System is in a SAFE state.")
+    print("Safe Sequence is:", " -> ".join([f"P{p}" for p in safe_sequence]))
+    return True
+
+
+if __name__ == "__main__":
+    # P0, P1, P2, P3, P4
+    processes = [0, 1, 2, 3, 4] 
+    
+    # Available instances of resources A, B, C
+    available = [3, 3, 2] 
+    
+    # Maximum Demand Matrix (What each process MIGHT need)
+    maximum = [
+        [7, 5, 3], # P0
+        [3, 2, 2], # P1
+        [9, 0, 2], # P2
+        [2, 2, 2], # P3
+        [4, 3, 3]  # P4
+    ]
+    
+    # Allocation Matrix (What each process CURRENTLY has)
+    allocation = [
+        [0, 1, 0], # P0
+        [2, 0, 0], # P1
+        [3, 0, 2], # P2
+        [2, 1, 1], # P3
+        [0, 0, 2]  # P4
+    ]
+    
+    print("--- BANKER'S ALGORITHM (DEADLOCK AVOIDANCE) ---\n")
+    bankers_algorithm(processes, available, maximum, allocation)
