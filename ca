@@ -1,0 +1,173 @@
+# Aim: Simulate Deadlock using two threads
+
+import threading
+import time
+
+lock1 = threading.Lock()
+lock2 = threading.Lock()
+
+def thread1():
+    print("Thread1 acquiring lock1")
+    lock1.acquire()
+    time.sleep(1)
+
+    print("Thread1 waiting for lock2")
+    lock2.acquire()
+
+    print("Thread1 acquired both locks")
+    lock2.release()
+    lock1.release()
+
+def thread2():
+    print("Thread2 acquiring lock2")
+    lock2.acquire()
+    time.sleep(1)
+
+    print("Thread2 waiting for lock1")
+    lock1.acquire()
+
+    print("Thread2 acquired both locks")
+    lock1.release()
+    lock2.release()
+
+t1 = threading.Thread(target=thread1)
+t2 = threading.Thread(target=thread2)
+
+t1.start()
+t2.start()
+
+
+
+
+
+
+
+  # Aim: Demonstrate External Fragmentation
+
+memory = [100, 500, 200, 300, 600]  # free blocks
+process = [212, 417, 112, 426]
+
+for p in process:
+    allocated = False
+    for i in range(len(memory)):
+        if memory[i] >= p:
+            print(f"Process {p} allocated in block {memory[i]}")
+            memory[i] -= p
+            allocated = True
+            break
+    if not allocated:
+        print(f"Process {p} not allocated (Fragmentation)")
+
+
+
+
+
+
+
+
+#Prevent Deadlock by Eliminating Circular Wait 
+
+import threading
+import time
+
+
+# Create our locks (resources)
+lock_1 = threading.Lock()
+lock_2 = threading.Lock()
+
+
+def process_a():
+    print("Process A is requesting Lock 1...")
+    lock_1.acquire()
+    print("Process A acquired Lock 1.")
+    
+    time.sleep(1) # Simulating work
+    
+    print("Process A is requesting Lock 2...")
+    lock_2.acquire()
+    print("Process A acquired Lock 2. Executing critical section!")
+    
+    # Release in reverse order
+    lock_2.release()
+    lock_1.release()
+    print("Process A finished and released all locks.\n")
+
+
+def process_b():
+    # To prevent deadlock, Process B MUST ALSO request Lock 1 first.
+    # If it requested Lock 2 first, we would get the exact deadlock we simulated earlier.
+    print("Process B is requesting Lock 1...")
+    lock_1.acquire()
+    print("Process B acquired Lock 1.")
+    
+    time.sleep(1) # Simulating work
+    
+    print("Process B is requesting Lock 2...")
+    lock_2.acquire()
+    print("Process B acquired Lock 2. Executing critical section!")
+    
+    # Release in reverse order
+    lock_2.release()
+    lock_1.release()
+    print("Process B finished and released all locks.\n")
+
+
+if __name__ == "__main__":
+    print("--- DEADLOCK PREVENTION (CIRCULAR WAIT ELIMINATED) ---\n")
+    
+    t1 = threading.Thread(target=process_a)
+    t2 = threading.Thread(target=process_b)
+    
+    t1.start()
+    t2.start()
+    
+    t1.join()
+    t2.join()
+    
+    print("Program completed successfully without Deadlock!")
+
+
+
+
+
+
+  # Aim: Memory Allocation Strategies
+
+blocks = [100, 500, 200, 300, 600]
+process = [212, 417, 112, 426]
+
+# First Fit
+print("\nFirst Fit")
+mem = blocks[:]
+for p in process:
+    for i in range(len(mem)):
+        if mem[i] >= p:
+            print(f"{p} -> Block {mem[i]}")
+            mem[i] -= p
+            break
+
+# Best Fit
+print("\nBest Fit")
+mem = blocks[:]
+for p in process:
+    idx = -1
+    for i in range(len(mem)):
+        if mem[i] >= p:
+            if idx == -1 or mem[i] < mem[idx]:
+                idx = i
+    if idx != -1:
+        print(f"{p} -> Block {mem[idx]}")
+        mem[idx] -= p
+
+# Worst Fit
+print("\nWorst Fit")
+mem = blocks[:]
+for p in process:
+    idx = -1
+    for i in range(len(mem)):
+        if mem[i] >= p:
+            if idx == -1 or mem[i] > mem[idx]:
+                idx = i
+    if idx != -1:
+        print(f"{p} -> Block {mem[idx]}")
+        mem[idx] -= p
