@@ -41,6 +41,44 @@ t2.start()
 
 
 
+# Aim: Logical to Physical Address using Segmentation (Clean Output)
+
+segments = {
+    0: (1000, 500),
+    1: (2000, 300),
+    2: (3000, 400)
+}
+
+print("\n===== Segmentation Address Translation =====\n")
+
+print("Segment Table:")
+for seg, (base, limit) in segments.items():
+    print(f"Segment {seg} → Base: {base}, Limit: {limit}")
+
+seg = int(input("\nEnter Segment Number: "))
+offset = int(input("Enter Offset: "))
+
+if seg in segments:
+    base, limit = segments[seg]
+    
+    print(f"\nChecking: Offset < Limit → {offset} < {limit}")
+
+    if offset < limit:
+        physical = base + offset
+        print(f"\n Physical Address = {base} + {offset} = {physical}")
+    else:
+        print("\n Segmentation Fault (Offset exceeds limit)")
+else:
+    print("\n Invalid Segment Number")
+
+
+
+
+
+
+
+
+
 
   # Aim: Demonstrate External Fragmentation
 
