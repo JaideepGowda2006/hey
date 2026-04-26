@@ -1,272 +1,255 @@
-# ============================================
-# Aim: Implement CPU Scheduling Algorithms with Arrival Time
-# Algorithms: FCFS, SJF (NP), SRTF, Round Robin,
-# Priority (NP), Priority (Preemptive)
-# ============================================
+# Aim: Implement FCFS Scheduling with Arrival Time
 
-# ----------- FCFS -----------
-def fcfs():
-    print("\n--- FCFS Scheduling ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
 
-    processes = sorted(zip(at, bt, range(n)))
-    wt = [0]*n
-    tat = [0]*n
+processes = sorted(zip(at, bt, range(n)))
 
-    time = 0
-    for at_i, bt_i, i in processes:
-        if time < at_i:
-            time = at_i
-        wt[i] = time - at_i
-        time += bt_i
-        tat[i] = wt[i] + bt_i
+wt = [0]*n
+tat = [0]*n
+time = 0
 
-    print("P\tAT\tBT\tWT\tTAT")
+for at_i, bt_i, i in processes:
+    if time < at_i:
+        time = at_i
+    wt[i] = time - at_i
+    time += bt_i
+    tat[i] = wt[i] + bt_i
+
+print("P\tAT\tBT\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+
+
+
+
+
+# Aim: Implement SJF (Non-Preemptive) with Arrival Time
+
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
+
+completed = [False]*n
+wt = [0]*n
+tat = [0]*n
+
+time = 0
+done = 0
+
+while done < n:
+    idx = -1
+    min_bt = float('inf')
+
     for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+        if at[i] <= time and not completed[i] and bt[i] < min_bt:
+            min_bt = bt[i]
+            idx = i
 
-
-# ----------- SJF Non-Preemptive -----------
-def sjf_np():
-    print("\n--- SJF (Non-Preemptive) ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
-
-    completed = [False]*n
-    wt = [0]*n
-    tat = [0]*n
-
-    time = 0
-    done = 0
-
-    while done < n:
-        idx = -1
-        min_bt = float('inf')
-
-        for i in range(n):
-            if at[i] <= time and not completed[i] and bt[i] < min_bt:
-                min_bt = bt[i]
-                idx = i
-
-        if idx == -1:
-            time += 1
-            continue
-
-        wt[idx] = time - at[idx]
-        time += bt[idx]
-        tat[idx] = wt[idx] + bt[idx]
-
-        completed[idx] = True
-        done += 1
-
-    print("P\tAT\tBT\tWT\tTAT")
-    for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
-
-
-# ----------- SRTF (Preemptive SJF) -----------
-def srtf():
-    print("\n--- SRTF (Preemptive SJF) ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
-
-    rt = bt[:]
-    wt = [0]*n
-    time = 0
-    complete = 0
-
-    while complete != n:
-        idx = -1
-        min_bt = float('inf')
-
-        for i in range(n):
-            if at[i] <= time and rt[i] > 0 and rt[i] < min_bt:
-                min_bt = rt[i]
-                idx = i
-
-        if idx == -1:
-            time += 1
-            continue
-
-        rt[idx] -= 1
-
-        if rt[idx] == 0:
-            complete += 1
-            finish = time + 1
-            wt[idx] = finish - bt[idx] - at[idx]
-
+    if idx == -1:
         time += 1
+        continue
 
-    tat = [bt[i] + wt[i] for i in range(n)]
+    wt[idx] = time - at[idx]
+    time += bt[idx]
+    tat[idx] = wt[idx] + bt[idx]
 
-    print("P\tAT\tBT\tWT\tTAT")
+    completed[idx] = True
+    done += 1
+
+print("P\tAT\tBT\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+
+
+
+
+
+
+# Aim: Implement SRTF (Preemptive SJF)
+
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
+
+rt = bt[:]
+wt = [0]*n
+time = 0
+complete = 0
+
+while complete != n:
+    idx = -1
+    min_bt = float('inf')
+
     for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+        if at[i] <= time and rt[i] > 0 and rt[i] < min_bt:
+            min_bt = rt[i]
+            idx = i
 
-
-# ----------- Round Robin -----------
-def round_robin():
-    print("\n--- Round Robin ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
-    q = int(input("Enter time quantum: "))
-
-    rt = bt[:]
-    wt = [0]*n
-    time = 0
-    queue = []
-    visited = [False]*n
-
-    while True:
-        for i in range(n):
-            if at[i] <= time and not visited[i]:
-                queue.append(i)
-                visited[i] = True
-
-        if not queue:
-            if all(rt[i] == 0 for i in range(n)):
-                break
-            time += 1
-            continue
-
-        i = queue.pop(0)
-
-        if rt[i] > q:
-            time += q
-            rt[i] -= q
-        else:
-            time += rt[i]
-            wt[i] = time - bt[i] - at[i]
-            rt[i] = 0
-
-        for j in range(n):
-            if at[j] <= time and not visited[j]:
-                queue.append(j)
-                visited[j] = True
-
-        if rt[i] > 0:
-            queue.append(i)
-
-    tat = [bt[i] + wt[i] for i in range(n)]
-
-    print("P\tAT\tBT\tWT\tTAT")
-    for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
-
-
-# ----------- Priority Non-Preemptive -----------
-def priority_np():
-    print("\n--- Priority (Non-Preemptive) ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
-    pr = list(map(int, input("Enter priorities: ").split()))
-
-    completed = [False]*n
-    wt = [0]*n
-    tat = [0]*n
-
-    time = 0
-    done = 0
-
-    while done < n:
-        idx = -1
-        min_pr = float('inf')
-
-        for i in range(n):
-            if at[i] <= time and not completed[i] and pr[i] < min_pr:
-                min_pr = pr[i]
-                idx = i
-
-        if idx == -1:
-            time += 1
-            continue
-
-        wt[idx] = time - at[idx]
-        time += bt[idx]
-        tat[idx] = wt[idx] + bt[idx]
-
-        completed[idx] = True
-        done += 1
-
-    print("P\tAT\tBT\tPR\tWT\tTAT")
-    for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{pr[i]}\t{wt[i]}\t{tat[i]}")
-
-
-# ----------- Priority Preemptive -----------
-def priority_p():
-    print("\n--- Priority (Preemptive) ---")
-    n = int(input("Enter number of processes: "))
-    at = list(map(int, input("Enter arrival times: ").split()))
-    bt = list(map(int, input("Enter burst times: ").split()))
-    pr = list(map(int, input("Enter priorities: ").split()))
-
-    rt = bt[:]
-    wt = [0]*n
-    time = 0
-    complete = 0
-
-    while complete != n:
-        idx = -1
-        min_pr = float('inf')
-
-        for i in range(n):
-            if at[i] <= time and rt[i] > 0 and pr[i] < min_pr:
-                min_pr = pr[i]
-                idx = i
-
-        if idx == -1:
-            time += 1
-            continue
-
-        rt[idx] -= 1
-
-        if rt[idx] == 0:
-            complete += 1
-            finish = time + 1
-            wt[idx] = finish - bt[idx] - at[idx]
-
+    if idx == -1:
         time += 1
+        continue
 
-    tat = [bt[i] + wt[i] for i in range(n)]
+    rt[idx] -= 1
 
-    print("P\tAT\tBT\tPR\tWT\tTAT")
-    for i in range(n):
-        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{pr[i]}\t{wt[i]}\t{tat[i]}")
+    if rt[idx] == 0:
+        complete += 1
+        finish = time + 1
+        wt[idx] = finish - bt[idx] - at[idx]
+
+    time += 1
+
+tat = [bt[i] + wt[i] for i in range(n)]
+
+print("P\tAT\tBT\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
 
 
-# ----------- Menu -----------
+
+
+
+# Aim: Implement Round Robin with Arrival Time
+
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
+q = int(input("Enter time quantum: "))
+
+rt = bt[:]
+wt = [0]*n
+time = 0
+queue = []
+visited = [False]*n
+
 while True:
-    print("\n===== CPU Scheduling Menu =====")
-    print("1. FCFS")
-    print("2. SJF (Non-Preemptive)")
-    print("3. SRTF (Preemptive SJF)")
-    print("4. Round Robin")
-    print("5. Priority (Non-Preemptive)")
-    print("6. Priority (Preemptive)")
-    print("7. Exit")
+    for i in range(n):
+        if at[i] <= time and not visited[i]:
+            queue.append(i)
+            visited[i] = True
 
-    choice = int(input("Enter your choice: "))
+    if not queue:
+        if all(rt[i] == 0 for i in range(n)):
+            break
+        time += 1
+        continue
 
-    if choice == 1:
-        fcfs()
-    elif choice == 2:
-        sjf_np()
-    elif choice == 3:
-        srtf()
-    elif choice == 4:
-        round_robin()
-    elif choice == 5:
-        priority_np()
-    elif choice == 6:
-        priority_p()
-    elif choice == 7:
-        break
+    i = queue.pop(0)
+
+    if rt[i] > q:
+        time += q
+        rt[i] -= q
     else:
-        print("Invalid choice")
+        time += rt[i]
+        wt[i] = time - bt[i] - at[i]
+        rt[i] = 0
+
+    for j in range(n):
+        if at[j] <= time and not visited[j]:
+            queue.append(j)
+            visited[j] = True
+
+    if rt[i] > 0:
+        queue.append(i)
+
+tat = [bt[i] + wt[i] for i in range(n)]
+
+print("P\tAT\tBT\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+
+
+
+
+
+
+
+# Aim: Implement Priority (Non-Preemptive) with Arrival Time
+
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
+pr = list(map(int, input("Enter priorities: ").split()))
+
+completed = [False]*n
+wt = [0]*n
+tat = [0]*n
+
+time = 0
+done = 0
+
+while done < n:
+    idx = -1
+    min_pr = float('inf')
+
+    for i in range(n):
+        if at[i] <= time and not completed[i] and pr[i] < min_pr:
+            min_pr = pr[i]
+            idx = i
+
+    if idx == -1:
+        time += 1
+        continue
+
+    wt[idx] = time - at[idx]
+    time += bt[idx]
+    tat[idx] = wt[idx] + bt[idx]
+
+    completed[idx] = True
+    done += 1
+
+print("P\tAT\tBT\tPR\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{pr[i]}\t{wt[i]}\t{tat[i]}")
+
+
+
+
+
+
+# Aim: Implement Priority (Preemptive) with Arrival Time
+
+n = int(input("Enter number of processes: "))
+at = list(map(int, input("Enter arrival times: ").split()))
+bt = list(map(int, input("Enter burst times: ").split()))
+pr = list(map(int, input("Enter priorities: ").split()))
+
+rt = bt[:]
+wt = [0]*n
+time = 0
+complete = 0
+
+while complete != n:
+    idx = -1
+    min_pr = float('inf')
+
+    for i in range(n):
+        if at[i] <= time and rt[i] > 0 and pr[i] < min_pr:
+            min_pr = pr[i]
+            idx = i
+
+    if idx == -1:
+        time += 1
+        continue
+
+    rt[idx] -= 1
+
+    if rt[idx] == 0:
+        complete += 1
+        finish = time + 1
+        wt[idx] = finish - bt[idx] - at[idx]
+
+    time += 1
+
+tat = [bt[i] + wt[i] for i in range(n)]
+
+print("P\tAT\tBT\tPR\tWT\tTAT")
+for i in range(n):
+    print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{pr[i]}\t{wt[i]}\t{tat[i]}")
+
+
+
+
+
+
